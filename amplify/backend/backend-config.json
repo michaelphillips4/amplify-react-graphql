@@ -1,4 +1,24 @@
 {
+  "api": {
+    "amplifyreactgraphql": {
+      "dependsOn": [],
+      "output": {
+        "authConfig": {
+          "additionalAuthenticationProviders": [],
+          "defaultAuthentication": {
+            "apiKeyConfig": {
+              "apiKeyExpirationDate": "2024-01-07T17:21:46.910Z",
+              "apiKeyExpirationDays": 7,
+              "description": ""
+            },
+            "authenticationType": "API_KEY"
+          }
+        }
+      },
+      "providerPlugin": "awscloudformation",
+      "service": "AppSync"
+    }
+  },
   "auth": {
     "amplifyreactgraphql1f874fb7": {
       "customAuth": false,
