@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
+import { IoIosSave } from "react-icons/io";
+import { MdAdd } from "react-icons/md";
+import { FaSave, FaTrash } from "react-icons/fa";
 import "@aws-amplify/ui-react/styles.css";
 import { generateClient } from 'aws-amplify/api';
+
 import {
-  Button,
   Flex,
-  Heading,
-  Text,
   TextField,
   View,
   withAuthenticator,
+  Alert
 } from "@aws-amplify/ui-react";
 import { listNotes } from "./graphql/queries";
 import {
@@ -22,15 +24,26 @@ const client = generateClient();
 
 const App = ({ signOut }) => {
   const [notes, setNotes] = useState([]);
+  const [errors, setErrors] = useState();
 
   useEffect(() => {
     fetchNotes();
   }, []);
 
   async function fetchNotes() {
-    const apiData = await client.graphql({ query: listNotes });
+    try{
+    const apiData = await client.graphql({
+       query: listNotes});
+
     const notesFromAPI = apiData.data.listNotes.items;
     setNotes(notesFromAPI);
+    }
+    catch (e)
+    {
+       setErrors(e)
+    }
+
+   
   }
 
   async function createNote(event) {
@@ -58,10 +71,21 @@ const App = ({ signOut }) => {
   }
 
   return (
-    <View className="App">
-      <Heading level={1}>My Notes App</Heading>
+    <div className="App">
+    <button onClick={signOut} className="float-right">Sign Out</button>
+    <h1>Notes App</h1>
+    
+    {errors &&  <Alert
+  variation="error"
+  isDismissible={true}
+  hasIcon={true}
+  heading="Error"
+  >{JSON.stringify(errors)}
+ </Alert>}
+
+     
       <View as="form" margin="3rem 0" onSubmit={createNote}>
-        <Flex direction="row" justifyContent="center">
+        <Flex direction="row" justifyContent="left">
           <TextField
             name="name"
             placeholder="Note Name"
@@ -78,32 +102,34 @@ const App = ({ signOut }) => {
             variation="quiet"
             required
           />
-          <Button type="submit" variation="primary">
-            Create Note
-          </Button>
+          <button type="submit" >
+           Create Note <FaSave />
+          </button>
         </Flex>
       </View>
-      <Heading level={2}>Current Notes</Heading>
-      <View margin="3rem 0">
+      <h2>Current Notes</h2>
+
+
+
+    
+
+<ul>
         {notes.map((note) => (
-          <Flex
-            key={note.id || note.name}
-            direction="row"
-            justifyContent="center"
-            alignItems="center"
-          >
-            <Text as="strong" fontWeight={700}>
-              {note.name}
-            </Text>
-            <Text as="span">{note.description}</Text>
-            <Button variation="link" onClick={() => deleteNote(note)}>
-              Delete note
-            </Button>
-          </Flex>
+          <li key={note.id}>
+            <p>
+            <button onClick={() => deleteNote(note)}>
+              <FaTrash />
+            </button>
+            &nbsp; &nbsp;  <b >        {note.name}
+            </b>
+            <span>{note.description}</span>
+          </p>
+
+          </li>
         ))}
-      </View>
-      <Button onClick={signOut}>Sign Out</Button>
-    </View>
+ </ul>   
+   
+    </div>
   );
 };
 
