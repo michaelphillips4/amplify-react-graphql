@@ -1,5 +1,38 @@
+body{
+  background-color: rgb(237, 237, 237);
+}
+
+h1{
+  text-align: center;
+}
 
 .float-right{
  
   float: right;
 }
+
+
+#root{
+  margin: auto;
+  width: 95%;
+  border: 1px solid silver;
+  border-radius: 4px;;
+  padding: 10px;
+  margin-top: 2vw;
+    padding-left: 1vw;
+    padding-right: 1vw;
+    background-color: white;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th, td {
+  padding: 8px;
+  text-align: left;
+ /*  border-bottom: 1px solid #DDD; */
+}
+
+tr:hover {background-color: rgb(237, 237, 237);}

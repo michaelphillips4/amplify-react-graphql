@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
-import { IoIosSave } from "react-icons/io";
-import { MdAdd } from "react-icons/md";
 import { FaSave, FaTrash } from "react-icons/fa";
 import "@aws-amplify/ui-react/styles.css";
 import { generateClient } from 'aws-amplify/api';
@@ -31,19 +29,19 @@ const App = ({ signOut }) => {
   }, []);
 
   async function fetchNotes() {
-    try{
-    const apiData = await client.graphql({
-       query: listNotes});
+    try {
+      const apiData = await client.graphql({
+        query: listNotes
+      });
 
-    const notesFromAPI = apiData.data.listNotes.items;
-    setNotes(notesFromAPI);
+      const notesFromAPI = apiData.data.listNotes.items;
+      setNotes(notesFromAPI);
     }
-    catch (e)
-    {
-       setErrors(e)
+    catch (e) {
+      setErrors(e)
     }
 
-   
+
   }
 
   async function createNote(event) {
@@ -72,18 +70,18 @@ const App = ({ signOut }) => {
 
   return (
     <div className="App">
-    <button onClick={signOut} className="float-right">Sign Out</button>
-    <h1>Notes App</h1>
-    
-    {errors &&  <Alert
-  variation="error"
-  isDismissible={true}
-  hasIcon={true}
-  heading="Error"
-  >{JSON.stringify(errors)}
- </Alert>}
+      <button onClick={signOut} className="float-right">Sign Out</button>
+      <h1>Notes App</h1>
 
-     
+      {errors && <Alert
+        variation="error"
+        isDismissible={true}
+        hasIcon={true}
+        heading="Error"
+      >{JSON.stringify(errors)}
+      </Alert>}
+
+
       <View as="form" margin="3rem 0" onSubmit={createNote}>
         <Flex direction="row" justifyContent="left">
           <TextField
@@ -100,10 +98,9 @@ const App = ({ signOut }) => {
             label="Note Description"
             labelHidden
             variation="quiet"
-            required
           />
           <button type="submit" >
-           Create Note <FaSave />
+            Create Note <FaSave />
           </button>
         </Flex>
       </View>
@@ -111,24 +108,33 @@ const App = ({ signOut }) => {
 
 
 
-    
 
-<ul>
-        {notes.map((note) => (
-          <li key={note.id}>
-            <p>
-            <button onClick={() => deleteNote(note)}>
-              <FaTrash />
-            </button>
-            &nbsp; &nbsp;  <b >        {note.name}
-            </b>
-            <span>{note.description}</span>
-          </p>
 
-          </li>
-        ))}
- </ul>   
-   
+      <table>
+        <thead>
+          <tr>
+          <th>Name</th>
+          <th>Description</th>
+         
+          </tr>
+        </thead>
+        <tbody>
+          {notes.map((note) => (
+            <tr key={note.id}>
+              <td>
+                {note.name}
+              </td>
+              <td>{note.description}</td>
+              <td>
+                <button onClick={() => deleteNote(note)} className="float-right">
+                 Delete <FaTrash />
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
     </div>
   );
 };
